@@ -2,3 +2,4 @@
 require external packages to function. Currently, the following functionality is supported:
 
 - Matching
+- Spectral functions (Combinatorial Adjacencies, based on the [GraphMatrices](https://github.com/jpfairbanks/GraphMatrices.jl) package
