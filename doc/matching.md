@@ -1,7 +1,7 @@
-# LGmatching
+# Matching
 
 ## Bipartite Matching
-*LGmatching.jl* supports maximum weight maximal matching computation on bipartite graphs
+*LightGraphsExtras.Matching* supports maximum weight maximal matching computation on bipartite graphs
 through linear programming relaxation.  In fact, on bipartite graphs, the solution
 of the linear problem is integer.
 
