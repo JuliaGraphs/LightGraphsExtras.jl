@@ -8,6 +8,7 @@ testdir = dirname(@__FILE__)
 
 tests = [
     "matching/runtests",
+    "spectral/runtests",
 ]
 
 
