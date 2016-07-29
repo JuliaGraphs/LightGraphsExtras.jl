@@ -1,0 +1,16 @@
+site_name: LGmatching.jl
+site_author: Seth Bromberger
+repo_url: https://github.com/JuliaGraphs/LGmatching.jl/
+theme: readthedocs
+pages:
+  - 'Matching': 'matching.md'
+docs_dir: 'doc'
+markdown_extensions:
+  - extra
+  - tables
+  - fenced_code
+extra_css:
+  - LGmatching.css
+extra_javascript:
+  - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML
+  - mathjaxhelper.js
