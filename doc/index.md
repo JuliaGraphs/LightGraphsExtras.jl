@@ -3,3 +3,5 @@ require external packages to function. Currently, the following functionality is
 
 - Matching
 - Spectral functions (Combinatorial Adjacencies, based on the [GraphMatrices](https://github.com/jpfairbanks/GraphMatrices.jl) package
+- Datasets
+- Community detection
