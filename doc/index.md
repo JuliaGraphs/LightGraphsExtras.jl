@@ -5,3 +5,4 @@ require external packages to function. Currently, the following functionality is
 - Spectral functions (Combinatorial Adjacencies, based on the [GraphMatrices](https://github.com/jpfairbanks/GraphMatrices.jl) package
 - Datasets
 - Community detection
+- Network Interdiction (flow) using [JuMP](https://github.com/JuliaOpt/JuMP.jl)
