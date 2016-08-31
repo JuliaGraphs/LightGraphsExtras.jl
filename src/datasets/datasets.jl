@@ -12,4 +12,4 @@ MDGraph, MDDiGraph
 include("smallgraphs.jl")
 include("matrixdepot.jl")
 
-end #nmodule
+end #module
