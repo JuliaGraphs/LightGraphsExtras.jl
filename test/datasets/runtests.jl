@@ -1,5 +1,4 @@
 tests = [
-    "datasets/smallgraphs",
     "datasets/matrixdepot"
 ]
 
