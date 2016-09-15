@@ -6,6 +6,7 @@ pages:
   - 'Getting Started': 'index.md'
   - 'Matching': 'matching.md'
   - 'Spectral': 'spectral.md'
+  - 'Network Interdiction': 'interdiction.md'
 docs_dir: 'doc'
 markdown_extensions:
   - extra
