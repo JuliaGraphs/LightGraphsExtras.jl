@@ -8,7 +8,7 @@
 Extra functionality for [LightGraphs](https://github.com/JuliaGraphs/LightGraphs.jl). Includes the following
 algorithms:
 - Matching
-- Spectral functions (Combinatorial Adjacencies, based on the [GraphMatrices](https://github.com/jpfairbanks/GraphMatrices.jl) package
+- Spectral functions (Combinatorial Adjacencies, based on the [GraphMatrices](https://github.com/jpfairbanks/GraphMatrices.jl) package)
 
 
 ## Installation Instructions
