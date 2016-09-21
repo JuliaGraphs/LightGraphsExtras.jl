@@ -3,10 +3,10 @@ module Community
 using LightGraphs
 import Clustering: kmeans
 
-export community_detection_nback
+export community_detection_nback, community_detection_bethe
 
 """
-    community_detection_nback(g, k::Int)
+    community_detection_nback(g::Graph, k::Int)
 
 Community detection using the spectral properties of
 the non-backtracking matrix of `g` (see [Krzakala et al.](http://www.pnas.org/content/110/52/20935.short)).
@@ -53,7 +53,7 @@ See `Nonbacktracking` for details.
 """
 function nonbacktrack_embedding(g::Graph, k::Int)
     B = Nonbacktracking(g)
-    λ,eigv,conv = eigs(B, nev=k+1, v0=ones(Float64, B.m))
+    λ, eigv, conv = eigs(B, nev=k+1, v0=ones(Float64, B.m))
     ϕ = zeros(Complex64, nv(g), k-1)
     # TODO decide what to do with the stationary distribution ϕ[:,1]
     # this code just throws it away in favor of eigv[:,2:k+1].
@@ -64,6 +64,36 @@ function nonbacktrack_embedding(g::Graph, k::Int)
         ϕ[:,n] = contract(B, v)
     end
     return ϕ'
+end
+
+
+
+"""
+    community_detection_bethe(g::Graph, k=-1; kmax=15)
+
+Community detection using the spectral properties of
+the Bethe Hessian matrix associated to `g` (see [Saade et al.](http://papers.nips.cc/paper/5520-spectral-clustering-of-graphs-with-the-bethe-hessian)).
+`k` is the number of community to detect. If omitted or if `k<1` the
+optimal number of communities will be automatically selected.
+In this case the maximum number of detectable communities is given by `kmax`.
+Returns a vector containing the vertex assignments.
+"""
+function community_detection_bethe(g::Graph, k::Int=-1; kmax::Int=15)
+    A = adjacency_matrix(g)
+    D = diagm(degree(g))
+    r = (sum(degree(g)) / nv(g))^0.5
+
+    Hr = (r^2-1)*eye(nv(g))-r*A+D;
+    # Hmr = (r^2-1)*eye(nv(g))+r*A+D;
+    k >= 1 && (kmax = k)
+    λ, eigv = eigs(Hr, which=:SR, nev=min(kmax, nv(g)))
+    q = findlast(x -> x<0, λ)
+    k > q && warn("Using eigenvectors with positive eigenvalues,
+                    some communities could be meaningless. Try to reduce `k`.")
+    k < 1 && (k = q)
+    k < 1 && return fill(1, nv(g))
+    labels = kmeans(eigv[:,2:k]', k).assignments
+    return labels
 end
 
 end #module
