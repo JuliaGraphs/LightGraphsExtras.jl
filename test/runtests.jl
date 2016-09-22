@@ -1,4 +1,4 @@
-# include("../src/LightGraphsExtras.jl")
+include("../src/LightGraphsExtras.jl")
 using LightGraphs
 using LightGraphsExtras
 using LightGraphsExtras.Matching
