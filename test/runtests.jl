@@ -10,15 +10,14 @@ using Base.Test
 testdir = dirname(@__FILE__)
 
 tests = [
-    "matching/runtests",
-    "spectral/runtests",
-    "datasets/runtests",
-    "community/detection",
-    "interdiction/runtests"
+    "matching",
+    "datasets",
+    "community",
+    "interdiction"
 ]
 
 for t in tests
-    tp = joinpath(testdir,"$(t).jl")
+    tp = joinpath(testdir, t, "runtests.jl")
     println("running $(tp) ...")
     include(tp)
 end

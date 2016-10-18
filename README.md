@@ -8,13 +8,17 @@
 Extra functionality for [LightGraphs](https://github.com/JuliaGraphs/LightGraphs.jl). Includes the following
 algorithms:
 - Matching
-- Spectral functions (Combinatorial Adjacencies, based on the [GraphMatrices](https://github.com/jpfairbanks/GraphMatrices.jl) package)
+- Community Detection
+- Network Interdiction
+- Integration with [MatrixDepot.jl](https://github.com/weijianzhang/MatrixDepot.jl)
 
 
-## Installation Instructions
-1.  Install [LightGraphs](https://github.com/JuliaGraphs/LightGraphs.jl) using `Pkg.add("LightGraphs")`.
-2.  Install [LightGraphsExtras](https://github.com/JuliaGraphs/LightGraphsExtras.jl) using `Pkg.add("LightGraphsExtras")`.
-3.  Ensure you have a JuMP solver (e.g., https://github.com/JuliaOpt/Clp.jl) installed.
+## Installation
+```julia
+Pkg.add("LightGraphsExtras")
+```
+
+Some of the functions require a JuMP solver installed (e.g., `Pkg.add("Clp")`).
 
 ## Documentation
 Documentation for this module is available at [Read The Docs](http://lightgraphsextrasjl.readthedocs.io/en/latest/?badge=latest).
