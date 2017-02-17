@@ -1,16 +1,16 @@
 """
-max_weight_matching{T <:Real}(g::Graph, w::Dict{Edge,T} = Dict{Edge,Int64}())
+maximum_weight_matching{T <:Real}(g::Graph, w::Dict{Edge,T} = Dict{Edge,Int64}())
 
 Given a graph `g` and an edgemap `w` containing weights associated to edges,
 returns a matching with the maximum total weight.
-`w` is a dictionnary that maps edges i => j (with i <= j) to weights.
-If no weight parameter is given,
-all edges will be considered to have weight 1 (results in max cardinality matching)
-
+`w` is a dictionnary that maps edges i => j to weights.
+If no weight parameter is given, all edges will be considered to have weight 1
+(results in max cardinality matching)
 
 The efficiency of the algorithm depends on the input graph:
-  - If the graph is bipartite, then the LP relaxation is guaranteed to be integral.
-  - If the graph is not bipartite, then the computation time may grow exponentially.
+  - If the graph is bipartite, then the LP relaxation is integral.
+  - If the graph is not bipartite, then it requires a MIP solver and
+  the computation time may grow exponentially.
 
 The package JuMP.jl and one of its supported solvers is required.
 
@@ -19,25 +19,37 @@ Returns MatchingResult containing:
   - the optimal cost
   - a list of each node's match.
 """
-function max_weight_matching end
+function maximum_weight_matching end
 
-function max_weight_matching{T <:Real}(g::Graph,
+function maximum_weight_matching{T <:Real}(g::Graph,
           w::Dict{Edge,T} = Dict{Edge,Int64}(i => 1 for i in edge_list))
 
     model = Model()
     n = nv(g)
     edge_list = collect(edges(g))
 
+    # put the edge weights in w in the right order to be compatible with edge_list
+    for (i,j) in keys(w)
+      if i >= j && !haskey(w, j=>i) # replace i=>j by j=>i if necessary.
+        w[Edge(j,i)] = w[Edge(i,j)]
+      end
+    end
+    
     if setdiff(edge_list, keys(w)) != [] # If some edges do not have a key in w.
       error("Some edge weights are missing, check that keys i => j in w satisfy i <= j")
     end
 
-    @variable(model, x[edge_list] >= 0, Int) # Only creates variables for each edge, not each pair of nodes.
+    if is_bipartite(g)
+      @variable(model, x[edge_list] >= 0) # no need to enforce integrality
+    else
+      @variable(model, x[edge_list] >= 0, Int) # requires MIP solver
+    end
     @objective(model, Max, sum(x[Edge(i,j)]*w[Edge(i,j)] for (i,j) in edge_list))
     @constraint(model, c1[i=1:n],
                 sum(x[Edge(i,j)] for j=filter(l -> l > i, neighbors(g,i))) +
                 sum(x[Edge(j,i)] for j=filter(l -> l <= i, neighbors(g,i)))
                 <= 1)
+
     status = solve(model)
     solution = getvalue(x)
     cost = getobjectivevalue(model)

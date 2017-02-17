@@ -56,6 +56,57 @@ match = Matching.maximum_weight_maximal_matching(g,w,0)
 @test match.mate[5] == 2
 @test match.mate[6] == 1
 
+g = CompleteGraph(3)
+w =Dict{Edge,Float64}()
+w[Edge(1,2)] = 1
+w[Edge(3,2)] = 1
+w[Edge(1,3)] = 1
+match = Matching.maximum_weight_matching(g,w)
+@test match.weight == 1
+
+g = Graph(4)
+w =Dict{Edge,Float64}()
+add_edge!(g, 1,3)
+add_edge!(g, 1,4)
+add_edge!(g, 2,4)
+w[Edge(1,3)] = 1
+w[Edge(1,4)] = 3
+w[Edge(2,4)] = 1
+match = Matching.maximum_weight_matching(g,w)
+@test match.weight == 3
+@test match.mate[1] == 4
+@test match.mate[2] == -1
+@test match.mate[3] == -1
+@test match.mate[4] == 1
+
+g = Graph(4)
+w =Dict{Edge,Float64}()
+add_edge!(g, 1,2)
+add_edge!(g, 2,3)
+add_edge!(g, 3,1)
+add_edge!(g, 3,4)
+w[Edge(1,2)] = 1
+w[Edge(2,3)] = 1
+w[Edge(1,3)] = 1
+w[Edge(3,4)] = 1
+match = Matching.maximum_weight_matching(g,w)
+@test match.weight == 2
+@test match.mate[1] == 2
+@test match.mate[2] == 1
+@test match.mate[3] == 4
+@test match.mate[4] == 3
+
+w[Edge(1,2)] = 1
+w[Edge(2,3)] = 1
+w[Edge(1,3)] = 5
+w[Edge(3,4)] = 1
+match = Matching.maximum_weight_matching(g,w)
+@test match.weight == 5
+@test match.mate[1] == 3
+@test match.mate[2] == -1
+@test match.mate[3] == 1
+@test match.mate[4] == -1
+
 w = Dict(Edge(1,2)=> 500)
 g =Graph(2)
 add_edge!(g,1,2)

@@ -1,7 +1,7 @@
 __precompile__(true)
 module Matching
 using LightGraphs
-export MatchingResult, max_weight_matching, maximum_weight_maximal_matching, minimum_weight_perfect_matching
+export MatchingResult, maximum_weight_matching, maximum_weight_maximal_matching, minimum_weight_perfect_matching
 
 """
     type MatchingResult{T}
@@ -26,6 +26,6 @@ include("blossomv.jl")
 
 using JuMP
 include("lp.jl")
-include("max_weight_matching.jl")
+include("maximum_weight_matching.jl")
 
 end #module
