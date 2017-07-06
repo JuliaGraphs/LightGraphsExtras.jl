@@ -3,7 +3,6 @@ using LightGraphs
 using LightGraphsExtras
 using LightGraphsExtras.Matching
 using LightGraphsExtras.Datasets
-using LightGraphsExtras.Community
 using LightGraphsExtras.Interdiction
 using Base.Test
 
@@ -12,7 +11,6 @@ testdir = dirname(@__FILE__)
 tests = [
     "matching",
     "datasets",
-    "community",
     "interdiction"
 ]
 
