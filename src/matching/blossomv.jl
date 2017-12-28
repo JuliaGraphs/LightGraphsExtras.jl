@@ -20,8 +20,8 @@ In case of error try to change the optional argument `tmaxscale` (default is `tm
 """
 function minimum_weight_perfect_matching end
 
-function minimum_weight_perfect_matching{T<:Real}(g::Graph, w::Dict{Edge,T}, cutoff, kws...)
-    wnew = Dict{Edge, T}()
+function minimum_weight_perfect_matching(g::Graph, w::Dict{E,T}, cutoff, kws...) where {T<:Real, E<:Edge}
+    wnew = Dict{E, T}()
     for (e, c) in w
         if c <= cutoff
             wnew[e] = c
@@ -30,8 +30,8 @@ function minimum_weight_perfect_matching{T<:Real}(g::Graph, w::Dict{Edge,T}, cut
     return minimum_weight_perfect_matching(g, wnew; kws...)
 end
 
-function minimum_weight_perfect_matching{T<:AbstractFloat}(g::Graph, w::Dict{Edge,T}; tmaxscale=10.)
-    wnew = Dict{Edge, Int32}()
+function minimum_weight_perfect_matching(g::Graph, w::Dict{E,T}; tmaxscale=10.) where {T<:AbstractFloat, E<:Edge}
+    wnew = Dict{E, Int32}()
     cmax = maximum(values(w))
     cmin = minimum(values(w))
     tmax = typemax(Int32)  / tmaxscale # /10 is kinda arbitrary,
@@ -44,13 +44,13 @@ function minimum_weight_perfect_matching{T<:AbstractFloat}(g::Graph, w::Dict{Edg
     for i=1:nv(g)
         j = match.mate[i]
         if j > i
-            weight += w[Edge(i,j)]
+            weight += w[E(i,j)]
         end
     end
     return MatchingResult(weight, match.mate)
 end
 
-function minimum_weight_perfect_matching{T<:Integer}(g::Graph, w::Dict{Edge,T})
+function minimum_weight_perfect_matching(g::Graph, w::Dict{E,T}) where {T<:Integer, E<:Edge}
     m = BlossomV.Matching(nv(g))
     for (e, c) in w
         BlossomV.add_edge(m, src(e)-1, dst(e)-1, c)

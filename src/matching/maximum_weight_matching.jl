@@ -21,9 +21,9 @@ Returns MatchingResult containing:
 """
 function maximum_weight_matching end
 
-function maximum_weight_matching{T <:Real}(g::Graph,
+function maximum_weight_matching(g::Graph,
           w::Dict{Edge,T} = Dict{Edge,Int64}(i => 1 for i in collect(edges(g)));
-          solver = GLPKSolverMIP)
+          solver = GLPKSolverMIP) where {T <:Real}
 
     model = Model(solver = solver())
     n = nv(g)
@@ -60,7 +60,7 @@ function maximum_weight_matching{T <:Real}(g::Graph,
 end
 
 """ Returns an array of mates from a dictionary that maps edges to {0,1} """
-function dict_to_arr{T<: Real}(n::Int64, solution::JuMP.JuMPArray{T,1,Tuple{Array{Edge,1}}})
+function dict_to_arr(n::Int64, solution::JuMP.JuMPArray{T,1,Tuple{Array{E,1}}}) where {T<: Real, E<: Edge}
   mate = fill(-1,n)
   for i in keys(solution)
     key = i[1] # i is a tuple with 1 element.
