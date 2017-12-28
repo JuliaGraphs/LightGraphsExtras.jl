@@ -22,9 +22,10 @@ Returns MatchingResult containing:
 function maximum_weight_matching end
 
 function maximum_weight_matching{T <:Real}(g::Graph,
-          w::Dict{Edge,T} = Dict{Edge,Int64}(i => 1 for i in collect(edges(g))))
+          w::Dict{Edge,T} = Dict{Edge,Int64}(i => 1 for i in collect(edges(g))),
+          solver = ClpSolver)
 
-    model = Model()
+    model = Model(solver = solver())
     n = nv(g)
     edge_list = collect(edges(g))
 

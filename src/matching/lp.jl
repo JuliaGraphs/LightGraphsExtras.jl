@@ -32,7 +32,7 @@ function maximum_weight_maximal_matching{T<:Real}(g::Graph, w::Dict{Edge,T}, cut
 end
 
 
-function maximum_weight_maximal_matching{T<:Real}(g::Graph, w::Dict{Edge,T})
+function maximum_weight_maximal_matching{T<:Real}(g::Graph, w::Dict{Edge,T}, solver = ClpSolver)
 # TODO support for graphs with zero degree nodes
 # TODO apply separately on each connected component
     bpmap = bipartite_map(g)
@@ -51,7 +51,7 @@ function maximum_weight_maximal_matching{T<:Real}(g::Graph, w::Dict{Edge,T})
         edgemap[reverse(e)] = nedg
     end
 
-    model = Model()
+    model = Model(solver=solver())
     @variable(model, x[1:length(w)] >= 0)
 
     for i in v1

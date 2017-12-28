@@ -24,6 +24,8 @@ end
 import BlossomV
 include("blossomv.jl")
 
+using Clp: ClpSolver
+
 using JuMP
 include("lp.jl")
 include("maximum_weight_matching.jl")
