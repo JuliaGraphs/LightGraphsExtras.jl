@@ -44,7 +44,7 @@ function maximum_weight_matching{T <:Real}(g::Graph,
     else
       @variable(model, x[edge_list] >= 0, Int) # requires MIP solver
     end
-    @objective(model, Max, sum(x[Edge(i,j)]*w[Edge(i,j)] for (i,j) in edge_list))
+    @objective(model, Max, sum(x[edge]*w[edge] for edge in edge_list))
     @constraint(model, c1[i=1:n],
                 sum(x[Edge(i,j)] for j=filter(l -> l > i, neighbors(g,i))) +
                 sum(x[Edge(j,i)] for j=filter(l -> l <= i, neighbors(g,i)))
