@@ -24,7 +24,7 @@ end
 import BlossomV
 include("blossomv.jl")
 
-using Clp: ClpSolver
+using GLPKMathProgInterface: GLPKSolverMIP
 
 using JuMP
 include("lp.jl")

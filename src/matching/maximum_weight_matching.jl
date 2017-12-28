@@ -23,7 +23,7 @@ function maximum_weight_matching end
 
 function maximum_weight_matching{T <:Real}(g::Graph,
           w::Dict{Edge,T} = Dict{Edge,Int64}(i => 1 for i in collect(edges(g)));
-          solver = ClpSolver)
+          solver = GLPKSolverMIP)
 
     model = Model(solver = solver())
     n = nv(g)
@@ -59,7 +59,7 @@ function maximum_weight_matching{T <:Real}(g::Graph,
     return MatchingResult(cost, dict_to_arr(n, solution))
 end
 
-""" Returns an array of mates from a dictionnary that maps edges to {0,1} """
+""" Returns an array of mates from a dictionary that maps edges to {0,1} """
 function dict_to_arr{T<: Real}(n::Int64, solution::JuMP.JuMPArray{T,1,Tuple{Array{Edge,1}}})
   mate = fill(-1,n)
   for i in keys(solution)
