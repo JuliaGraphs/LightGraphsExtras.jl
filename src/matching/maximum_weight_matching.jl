@@ -30,8 +30,9 @@ function maximum_weight_matching{T <:Real}(g::Graph,
 
     # put the edge weights in w in the right order to be compatible with edge_list
     for edge in keys(w)
-      if !isordered(edge) && !haskey(w, j=>i) # replace i=>j by j=>i if necessary.
-        w[reverse(edge)] = w[edge]
+      redge = reverse(edge)
+      if !isordered(edge) && !haskey(w, redge) # replace i=>j by j=>i if necessary.
+        w[redge] = w[edge]
       end
     end
 
