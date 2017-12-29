@@ -1,10 +1,10 @@
-function init_first_level_arc{T<:AbstractFloat}(
+function init_first_level_arc(
   flow_graph::DiGraph,                          # the input graph
   source::Int,                                  # the source vertex
   target::Int,                                  # the target vertex
   capacity_matrix::AbstractArray{T, 2},         # edge flow capacities
   solver::AbstractMathProgSolver                # keyword for solver
-  )
+  ) where {T<:AbstractFloat}
   n = nv(flow_graph)           # size of the network
 
 	first_level = Model(solver = solver)
@@ -31,7 +31,7 @@ function init_first_level_arc{T<:AbstractFloat}(
   return first_level, x, z
 end
 
-function init_second_level_arc{T<:AbstractFloat}(
+function init_second_level_arc(
   flow_graph::DiGraph,                          # the input graph
   source::Int,                                  # the source vertex
   target::Int,                                  # the target vertex
@@ -39,7 +39,7 @@ function init_second_level_arc{T<:AbstractFloat}(
   attacks::Int,                                 # argument for attacks
   solver::AbstractMathProgSolver,               # keyword for solver
   x::Matrix{JuMP.Variable}                      # flows from first_level
-  )
+  ) where {T<:AbstractFloat}
   n = nv(flow_graph)           # size of the network
   x_value = getvalue(x)        # extract the value of variable x
 
@@ -90,7 +90,7 @@ function init_second_level_arc{T<:AbstractFloat}(
   return second_level, δ, ν
 end
 
-function bilevel_adaptive_arc{T<:AbstractFloat}(
+function bilevel_adaptive_arc(
   flow_graph::DiGraph,                          # the input graph
   source::Int,                                  # the source vertex
   target::Int,                                  # the target vertex
@@ -100,7 +100,7 @@ function bilevel_adaptive_arc{T<:AbstractFloat}(
   rtol::T,                                      # relative tolerance
   atol::T,                                      # absolute tolerance
   time_limit::Float64                           # time limit (seconds)
-  )
+  ) where {T<:AbstractFloat}
 	start_time = time()               # time stamp (seconds)
   n = nv(flow_graph)                # size of the network
   lower_bound = 0.

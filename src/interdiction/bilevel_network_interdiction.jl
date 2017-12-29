@@ -1,4 +1,4 @@
-function bilevel_network_interdiction{T<:AbstractFloat}(
+function bilevel_network_interdiction(
   flow_graph::DiGraph,                          # the input graph
   source::Int,                                  # the source vertex
   target::Int,                                  # the target vertex
@@ -8,7 +8,7 @@ function bilevel_network_interdiction{T<:AbstractFloat}(
   rtol::T,                                      # absolute tolerance
   atol::T,                                      # relative tolerance
   time_limit::Float64                           # time limit
-  )
+  ) where {T<:AbstractFloat}
 	start_time = time()                           # time stamp
   n = nv(flow_graph)                            # size of the network
   lower_bound = 0.

@@ -1,5 +1,5 @@
 # Method when the algorithm used is the Multilink Attack algorithm
-function adaptive_path{T<:AbstractFloat}(
+function adaptive_path(
   flow_graph::DiGraph,                           # the input graph
   source::Int,                                   # the source vertex
   target::Int,                                   # the target vertex
@@ -10,7 +10,7 @@ function adaptive_path{T<:AbstractFloat}(
   rtol::T,                                       # absolute tolerance (unused)
   atol::T,                                       # relative tolerance (unused)
   time_limit::Float64                            # time limit (seconds) (unused)
-  )
+  ) where {T<:AbstractFloat}
   lower_bound, upper_bound , lower_restriction, upper_restriction =
     multilink_attack(flow_graph, source, target, capacity_matrix, attacks)
 
@@ -19,7 +19,7 @@ function adaptive_path{T<:AbstractFloat}(
 end
 
 # Method when the algorithm used is a Bilevel Mixed Integer Linear Program
-function adaptive_path{T<:AbstractFloat}(
+function adaptive_path(
   flow_graph::DiGraph,                           # the input graph
   source::Int,                                   # the source vertex
   target::Int,                                   # the target vertex
@@ -30,7 +30,7 @@ function adaptive_path{T<:AbstractFloat}(
   rtol::T,                                       # absolute tolerance (unused)
   atol::T,                                       # relative tolerance (unused)
   time_limit::Float64                            # time limit (seconds) (unused)
-  )
+  ) where {T<:AbstractFloat}
   return bilevel_adaptive_path(flow_graph, source, target, capacity_matrix,
                                    attacks, solver, rtol, atol, time_limit)
 end

@@ -1,16 +1,16 @@
 # Compute the projection of (x,y) on the y-axis along a given slope
-function projection{T<:AbstractFloat}(
+function projection(
   x::T, y::T,       # Coordinates
   slope::Int                    # Associated slope
-  )
+  ) where {T<:AbstractFloat}
   return y - slope * x
 end
 
 # Compute the upper and lower bounds for a given number of attacks
-function bounds_from_points{T<:AbstractFloat}(
+function bounds_from_points(
   breaking_points::Vector{Tuple{T,T,Int}},       # Set of breaking points
   attacks::Int                                   # argument for attacks
-  )
+  ) where {T<:AbstractFloat}
   # Indices for upper and lower bounds
   upper_index = 0
   lower_index = 0
@@ -39,13 +39,13 @@ function bounds_from_points{T<:AbstractFloat}(
 end
 
 
-function multilink_attack{T<:AbstractFloat}(
+function multilink_attack(
   flow_graph::DiGraph,                           # the input graph
   source::Int,                                   # the source vertex
   target::Int,                                   # the target vertex
   capacity_matrix::AbstractArray{T, 2},          # edge flow capacities
   attacks::Int                                   # argument for attacks
-  )
+  ) where {T<:AbstractFloat}
   # Get all the breaking points from extended multiroute flow algorithm
   breaking_points = multiroute_flow(flow_graph, source, target, capacity_matrix, flow_algorithm = EdmondsKarpAlgorithm())
 

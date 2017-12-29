@@ -5,6 +5,8 @@ using LightGraphs
 using JuMP
 using MathProgBase
 
+using GLPKMathProgInterface: GLPKSolverMIP
+
 import MathProgBase.SolverInterface.AbstractMathProgSolver,
        JuMP.UnsetSolver,
        LightGraphs.DefaultCapacity
@@ -16,42 +18,37 @@ export interdiction_flow, ⪷,
 """
 Abstract type that allows users to indicate their Problem
 """
-abstract AbstractInterdictionFlowProblem
+abstract type AbstractInterdictionFlowProblem end
 
 """
 Set the problem version to Network Interdiction (attacker strikes first)
 """
-type NetworkInterdictionProblem <: AbstractInterdictionFlowProblem
-end
+struct NetworkInterdictionProblem <: AbstractInterdictionFlowProblem end
 
 """
 Set the problem version to Adaptive Network Flow [arc version] (flow is computed first)
 """
-type AdaptiveFlowArcProblem <: AbstractInterdictionFlowProblem
-end
+struct AdaptiveFlowArcProblem <: AbstractInterdictionFlowProblem end
 
 """
 Set the problem version to Adaptive Network Flow [path version] (flow is computed first)
 """
-type AdaptiveFlowPathProblem <: AbstractInterdictionFlowProblem
-end
+struct AdaptiveFlowPathProblem <: AbstractInterdictionFlowProblem end
 
 """
 Abstract type that allows users to pass in their preferred Algorithm
 """
-abstract AbstractInterdictionFlowAlgorithm
+abstract type AbstractInterdictionFlowAlgorithm end
 
 """
 Forces the network_interdiction, adaptive_arc, or adaptive_path functions to use the Multilink Attack (MLA) algorithm.
 """
-type MultilinkAttackAlgorithm <: AbstractInterdictionFlowAlgorithm
-end
+struct MultilinkAttackAlgorithm <: AbstractInterdictionFlowAlgorithm end
 
 """
 Forces the adaptive_arc function to use a Bilevel Mixed-Integer Linear Program (BMILP)
 """
-type BilevelMixedIntegerLinearProgram <: AbstractInterdictionFlowAlgorithm
-end
+struct BilevelMixedIntegerLinearProgram <: AbstractInterdictionFlowAlgorithm end
 
 # Includes : algorithms
 include("multilink_attack.jl")
@@ -75,15 +72,12 @@ function ⪷{T<:AbstractFloat}(
 end
 ```
 """
-function ⪷{T<:AbstractFloat}(
-  x::T,
-  y::T
-  )
+function ⪷(x::T, y::T) where {T<:AbstractFloat}
   return x ≈ y || x < y
 end
 
 # Method when the problem considered is Network Interdiction
-function interdiction_flow{T<:AbstractFloat}(
+function interdiction_flow(
   flow_graph::DiGraph,                           # the input graph
   source::Int,                                   # the source vertex
   target::Int,                                   # the target vertex
@@ -95,13 +89,13 @@ function interdiction_flow{T<:AbstractFloat}(
   rtol::T,                                       # relative tolerance
   atol::T,                                       # absolute tolerance
   time_limit::Float64                            # time limit (seconds)
-  )
+  ) where {T<:AbstractFloat}
   return network_interdiction(flow_graph, source, target, capacity_matrix,
                        attacks, algorithm, solver, rtol, atol, time_limit)
 end
 
 # Method when the problem considered is Adaptive Flow (arc version)
-function interdiction_flow{T<:AbstractFloat}(
+function interdiction_flow(
   flow_graph::DiGraph,                           # the input graph
   source::Int,                                   # the source vertex
   target::Int,                                   # the target vertex
@@ -113,13 +107,13 @@ function interdiction_flow{T<:AbstractFloat}(
   rtol::T,                                       # relative tolerance
   atol::T,                                       # absolute tolerance
   time_limit::Float64                            # time limit (seconds)
-  )
+  ) where {T<:AbstractFloat}
   return adaptive_arc(flow_graph, source, target, capacity_matrix, attacks,
                                  algorithm, solver, rtol, atol, time_limit)
 end
 
 # Method when the problem considered is Adaptive Flow (path version)
-function interdiction_flow{T<:AbstractFloat}(
+function interdiction_flow(
   flow_graph::DiGraph,                           # the input graph
   source::Int,                                   # the source vertex
   target::Int,                                   # the target vertex
@@ -131,7 +125,7 @@ function interdiction_flow{T<:AbstractFloat}(
   rtol::T,                                       # relative tolerance
   atol::T,                                       # absolute tolerance
   time_limit::Float64                            # time limit (seconds)
-  )
+  ) where {T<:AbstractFloat}
   return adaptive_path(flow_graph, source, target, capacity_matrix, attacks,
                                   algorithm, solver, rtol, atol, time_limit)
 end
@@ -178,7 +172,7 @@ This Interdiction Flow (including all the variants) for general graphs is an NP-
   [Suppakitpaisarn et al.](http://dx.doi.org/10.1109/HPSR.2015.7483079)
   for more details.
 - A Bilevel Mixed Integer Linear Program (BMILP) framework using `JuMP.jl` that is
-  guaranteed to converge. (Only the adaptive flow (arc) vairant is covered yet, the
+  guaranteed to converge. (Only the adaptive flow (arc) variant is covered yet, the
   others use dummy functions). The results of this framework through
   `LightGraphsExtras.jl` will be appear in the following month in the litterature.
 
@@ -216,7 +210,7 @@ When the number of attacks is set to -1, an array with the results for any possi
 
 """
 
-function interdiction_flow{T<:AbstractFloat}(
+function interdiction_flow(
   flow_graph::DiGraph,                           # the input graph
   source::Int,                                   # the source vertex
   target::Int,                                   # the target vertex
@@ -227,11 +221,11 @@ function interdiction_flow{T<:AbstractFloat}(
   problem::AbstractInterdictionFlowProblem =     # keyword argument for problem
     NetworkInterdictionProblem(),
   solver::AbstractMathProgSolver =               # keyword for solver
-    UnsetSolver(),
+    GLPKSolverMIP(),
   rtol::T = sqrt(eps()),                         # relative tolerance
   atol::T = 0.,                                  # absolute tolerance
   time_limit::Float64 = Inf                      # time limit (seconds)
-  )
+  ) where {T<:AbstractFloat}
   # attacks ≥ λ (connectivity) → f = 0
   λ = maximum_flow(flow_graph, source, target, DefaultCapacity(flow_graph), algorithm = EdmondsKarpAlgorithm())[1]
   (attacks ≥ λ) && return 0., 0., 0., 0.

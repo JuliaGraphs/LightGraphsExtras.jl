@@ -21,17 +21,19 @@ Returns MatchingResult containing:
 """
 function maximum_weight_matching end
 
-function maximum_weight_matching{T <:Real}(g::Graph,
-          w::Dict{Edge,T} = Dict{Edge,Int64}(i => 1 for i in collect(edges(g))))
+function maximum_weight_matching(g::Graph,
+          w::Dict{Edge,T} = Dict{Edge,Int64}(i => 1 for i in collect(edges(g)));
+          solver = GLPKSolverMIP) where {T <:Real}
 
-    model = Model()
+    model = Model(solver = solver())
     n = nv(g)
     edge_list = collect(edges(g))
 
     # put the edge weights in w in the right order to be compatible with edge_list
-    for (i,j) in keys(w)
-      if i >= j && !haskey(w, j=>i) # replace i=>j by j=>i if necessary.
-        w[Edge(j,i)] = w[Edge(i,j)]
+    for edge in keys(w)
+      redge = reverse(edge)
+      if !is_ordered(edge) && !haskey(w, redge) # replace i=>j by j=>i if necessary.
+        w[redge] = w[edge]
       end
     end
 
@@ -44,7 +46,7 @@ function maximum_weight_matching{T <:Real}(g::Graph,
     else
       @variable(model, x[edge_list] >= 0, Int) # requires MIP solver
     end
-    @objective(model, Max, sum(x[Edge(i,j)]*w[Edge(i,j)] for (i,j) in edge_list))
+    @objective(model, Max, sum(x[edge]*w[edge] for edge in edge_list))
     @constraint(model, c1[i=1:n],
                 sum(x[Edge(i,j)] for j=filter(l -> l > i, neighbors(g,i))) +
                 sum(x[Edge(j,i)] for j=filter(l -> l <= i, neighbors(g,i)))
@@ -57,8 +59,8 @@ function maximum_weight_matching{T <:Real}(g::Graph,
     return MatchingResult(cost, dict_to_arr(n, solution))
 end
 
-""" Returns an array of mates from a dictionnary that maps edges to {0,1} """
-function dict_to_arr{T<: Real}(n::Int64, solution::JuMP.JuMPArray{T,1,Tuple{Array{Edge,1}}})
+""" Returns an array of mates from a dictionary that maps edges to {0,1} """
+function dict_to_arr(n::Int64, solution::JuMP.JuMPArray{T,1,Tuple{Array{E,1}}}) where {T<: Real, E<: Edge}
   mate = fill(-1,n)
   for i in keys(solution)
     key = i[1] # i is a tuple with 1 element.
