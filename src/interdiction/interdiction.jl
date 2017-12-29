@@ -5,6 +5,8 @@ using LightGraphs
 using JuMP
 using MathProgBase
 
+using GLPKMathProgInterface: GLPKSolverMIP
+
 import MathProgBase.SolverInterface.AbstractMathProgSolver,
        JuMP.UnsetSolver,
        LightGraphs.DefaultCapacity
@@ -170,7 +172,7 @@ This Interdiction Flow (including all the variants) for general graphs is an NP-
   [Suppakitpaisarn et al.](http://dx.doi.org/10.1109/HPSR.2015.7483079)
   for more details.
 - A Bilevel Mixed Integer Linear Program (BMILP) framework using `JuMP.jl` that is
-  guaranteed to converge. (Only the adaptive flow (arc) vairant is covered yet, the
+  guaranteed to converge. (Only the adaptive flow (arc) variant is covered yet, the
   others use dummy functions). The results of this framework through
   `LightGraphsExtras.jl` will be appear in the following month in the litterature.
 
@@ -219,7 +221,7 @@ function interdiction_flow(
   problem::AbstractInterdictionFlowProblem =     # keyword argument for problem
     NetworkInterdictionProblem(),
   solver::AbstractMathProgSolver =               # keyword for solver
-    UnsetSolver(),
+    GLPKSolverMIP(),
   rtol::T = sqrt(eps()),                         # relative tolerance
   atol::T = 0.,                                  # absolute tolerance
   time_limit::Float64 = Inf                      # time limit (seconds)
