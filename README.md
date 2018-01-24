@@ -7,8 +7,6 @@
 
 Extra functionality for [LightGraphs](https://github.com/JuliaGraphs/LightGraphs.jl). Includes the following
 algorithms:
-- Matching
-- Community Detection
 - Network Interdiction
 - Integration with [MatrixDepot.jl](https://github.com/weijianzhang/MatrixDepot.jl)
 
