@@ -1,7 +1,6 @@
 include("../src/LightGraphsExtras.jl")
 using LightGraphs
 using LightGraphsExtras
-using LightGraphsExtras.Matching
 using LightGraphsExtras.Datasets
 using LightGraphsExtras.Interdiction
 using Base.Test
@@ -9,7 +8,6 @@ using Base.Test
 testdir = dirname(@__FILE__)
 
 tests = [
-    "matching",
     "datasets",
     "interdiction"
 ]

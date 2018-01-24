@@ -1,10 +1,10 @@
 module LightGraphsExtras
 
-export Matching
+using LightGraphs
+
 export Datasets
 export Interdiction
 
-include("matching/matching.jl")
 include("datasets/datasets.jl")
 include("interdiction/interdiction.jl")
 
