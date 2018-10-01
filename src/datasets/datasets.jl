@@ -1,7 +1,6 @@
-__precompile__(true)
 module Datasets
 
-using ...LightGraphs
+using LightGraphs
 using MatrixDepot
 
 # matrixdepot

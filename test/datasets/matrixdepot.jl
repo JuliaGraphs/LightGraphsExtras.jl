@@ -1,3 +1,5 @@
+@testset "MatrixDepot" begin
+
 println("*** Running MatrixDepot tests")
 randstr = "LightGraphs/$(rand(1:10000))"
 g = MDGraph("hilb", 4)
@@ -8,3 +10,5 @@ g = MDDiGraph("baart", 4)
 
 @test_throws ErrorException MDGraph("baart", 4)
 println("*** Finished MatrixDepot tests")
+
+end

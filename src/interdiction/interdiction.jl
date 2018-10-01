@@ -1,15 +1,15 @@
-__precompile__(true)
 module Interdiction
 
 using LightGraphs
 using JuMP
 using MathProgBase
+using LightGraphsFlows
 
 using GLPKMathProgInterface: GLPKSolverMIP
 
 import MathProgBase.SolverInterface.AbstractMathProgSolver,
        JuMP.UnsetSolver,
-       LightGraphs.DefaultCapacity
+       LightGraphsFlows.DefaultCapacity
 
 export interdiction_flow, ⪷,
        NetworkInterdictionProblem, AdaptiveFlowArcProblem, AdaptiveFlowPathProblem,
@@ -202,14 +202,13 @@ use of the solver keyword, as it is similar to the `Model()` method there.
 
 All algorithms return a tuple with 1) a lower bound and 2) an upper bound.
 For the Multilink Attack algorithm, it also returns the restriction values (to use with
-the function maximum_flow in LightGraphs.jl) associated with 3-a) the lower bound and
+the function maximum_flow in LightGraphsFlows.jl) associated with 3-a) the lower bound and
 4-a) the upper bound. When the BMILP is used, the third element returned is 3-b) the
 time used by the algorithm.
 
 When the number of attacks is set to -1, an array with the results for any possible number of attacks will be output. Each result will be output as above.
 
 """
-
 function interdiction_flow(
   flow_graph::DiGraph,                           # the input graph
   source::Int,                                   # the source vertex
