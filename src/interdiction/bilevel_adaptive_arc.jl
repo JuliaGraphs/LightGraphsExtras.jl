@@ -18,9 +18,9 @@ function init_first_level_arc(
 	# flow conservation constraints
 	for v in vertices(flow_graph)
 		if (v ≠ source && v ≠ target)
-      @constraint(first_level, sum{x[i, j], i = 1:n, j = 1:n;
-        capacity_matrix[i ,j] > 0} - sum{x[j, i], i = 1:n, j = 1:n;
-        capacity_matrix[j, i] > 0} == 0)
+      @constraint(first_level, sum(x[i, j] for i = 1:n, j = 1:n if
+        capacity_matrix[i ,j] > 0) - sum(x[j, i] for i = 1:n, j = 1:n if
+        capacity_matrix[j, i] > 0) == 0)
 	   	end
 	end
 
@@ -55,9 +55,9 @@ function init_second_level_arc(
   @variable(second_level, ν[i = 1:n, j = 1:n] ≥ 0)
 
   # set objective
-  @objective(second_level, Min, sum{
-    x_value[i, j] * δ[i, j] - x_value[i, j] * ν[i, j], i = 1:n, j = 1:n;
-    capacity_matrix[i, j] > 0})
+  @objective(second_level, Min, sum(
+    x_value[i, j] * δ[i, j] - x_value[i, j] * ν[i, j] for i = 1:n, j = 1:n if
+    capacity_matrix[i, j] > 0))
 
   # constraints over the edges
   for e in edges(flow_graph)
@@ -85,7 +85,7 @@ function init_second_level_arc(
   end
 
   # constraint on the upper bound for the number of attacks
-  @constraint(second_level, sum{μ[i, j], i = 1:n, j = 1:n} ≤ attacks)
+  @constraint(second_level, sum(μ[i, j] for i = 1:n, j = 1:n) ≤ attacks)
 
   return second_level, δ, ν
 end
@@ -130,9 +130,9 @@ function bilevel_adaptive_arc(
     # Otherwise add the new cut to the first level
 		δ_value = getvalue(δ)
 		ν_value = getvalue(ν)
-    @constraint(first_level, z ≤ sum{
-      δ_value[i, j] * x[i, j] - ν_value[i, j] * x[i, j], i = 1:n, j = 1:n;
-      capacity_matrix[i, j] > 0})
+    @constraint(first_level, z ≤ sum(
+      δ_value[i, j] * x[i, j] - ν_value[i, j] * x[i, j] for i = 1:n, j = 1:n if
+      capacity_matrix[i, j] > 0))
   end
 
   # Return objective value and elapsed time

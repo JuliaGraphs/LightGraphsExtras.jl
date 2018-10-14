@@ -1,6 +1,9 @@
-using Base.Test
+using Test
 using LightGraphs
 using LightGraphsExtras.Interdiction
+using LightGraphsFlows: maximum_flow
+
+@testset "interdiction" begin
 
 #### Graphs for testing
 graphs = [
@@ -81,5 +84,7 @@ for (nvertices, flow_edges, s, t) in graphs
   # Test when attacks = -1
   @test interdiction_flow(flow_graph, s, t, capacity_matrix)[2] ==
         interdiction_flow(flow_graph, s, t, capacity_matrix, 1)
+
+end
 
 end
