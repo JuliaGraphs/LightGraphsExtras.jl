@@ -5,7 +5,7 @@
 [![Documentation Status](https://readthedocs.org/projects/lightgraphsextrasjl/badge/?version=latest)](http://lightgraphsextrasjl.readthedocs.io/en/latest/?badge=latest)
 [![Join the chat at https://gitter.im/JuliaGraphs/LightGraphs.jl](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/JuliaGraphs/LightGraphs.jl)
 
-Extra functionality for [Graphs](https://github.com/JuliaGraphs/Graphs.jl). Includes the following
+Extra functionality for [LightGraphs](https://github.com/sbromberger/LightGraphs.jl). Includes the following
 algorithms:
 - Network Interdiction
 - Integration with [MatrixDepot.jl](https://github.com/JuliaMatrices/MatrixDepot.jl)
