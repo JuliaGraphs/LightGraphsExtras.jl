@@ -1,5 +1,7 @@
 # LightGraphsExtras
 
+Note: Development of this package has been moved to GraphsExtras.jl. LightGraphsExtras.jl will note receive any updates anymore.
+
 [![Build Status](https://travis-ci.com/JuliaGraphs/LightGraphsExtras.jl.svg?branch=master)](https://travis-ci.com/JuliaGraphs/LightGraphsExtras.jl)
 [![codecov](https://codecov.io/gh/JuliaGraphs/LightGraphsExtras.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaGraphs/LightGraphsExtras.jl)
 [![Documentation Status](https://readthedocs.org/projects/lightgraphsextrasjl/badge/?version=latest)](http://lightgraphsextrasjl.readthedocs.io/en/latest/?badge=latest)
